@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blue to Black Gradient</title>
+    <title>Dark Midnight Gradient</title>
     <style>
         /* Reset default margins and padding */
         * {
@@ -12,35 +12,36 @@
             box-sizing: border-box;
         }
 
-        /* Style the body to fill the entire screen with the gradient */
+        /* Deep, dark gradient from top-left to bottom-right */
         body {
             min-height: 100vh;
-            /* to bottom right creates the diagonal direction */
-            background: linear-gradient(to bottom right, #0000ff, #000000);
+            background: linear-gradient(to bottom right, #0a1128, #000000);
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: Arial, sans-serif;
-            color: white;
+            color: #e0e0e0; /* Slightly dimmed text to match the dark theme */
         }
 
-        /* Optional card style just to give the page some content */
+        /* Subtle, translucent card content */
         .content {
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 40px;
             border-radius: 12px;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
         }
 
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            letter-spacing: -0.5px;
         }
 
         p {
-            opacity: 0.8;
+            opacity: 0.6;
         }
     </style>
 </head>
@@ -48,7 +49,7 @@
 
     <div class="content">
         <h1>Hello World</h1>
-        <p>Your beautiful gradient website is ready.</p>
+        <p>Your ultra-dark gradient website is ready.</p>
     </div>
 
 </body>
