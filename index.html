@@ -29,9 +29,13 @@
             height: 100%;
             z-index: 2;
             pointer-events: auto; 
+            
+            /* Applies a mask to fade the grid out around the edges of the screen */
+            mask-image: radial-gradient(circle, black 30%, transparent 80%);
+            -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
         }
 
-        /* The Mouse Glow Effect - Dropped to 0.1 opacity for ultra-high transparency */
+        /* The Mouse Glow Effect - Ultra-high transparency */
         .glow {
             position: absolute;
             width: 200px; 
