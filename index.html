@@ -29,13 +29,10 @@
             height: 100%;
             z-index: 2;
             pointer-events: auto; 
-            
-            /* Applies a mask to fade the grid out around the edges of the screen */
-            mask-image: radial-gradient(circle, black 30%, transparent 80%);
-            -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
+            /* Mask-image properties removed so the grid no longer fades on the outside */
         }
 
-        /* The Mouse Glow Effect - Updated to exactly 10% opacity (0.1) */
+        /* The Mouse Glow Effect - Stable at 10% opacity (0.1) */
         .glow {
             position: absolute;
             width: 200px; 
