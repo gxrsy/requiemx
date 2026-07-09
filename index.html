@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Dark Grid</title>
+    <title>Interactive Fine Grid</title>
     <style>
         /* Reset default margins and padding */
         * {
@@ -20,7 +20,7 @@
             overflow: hidden;
         }
 
-        /* The Grid Layer */
+        /* The Grid Layer - Now much smaller and tighter */
         .grid {
             position: absolute;
             top: 0;
@@ -30,7 +30,8 @@
             background-image: 
                 linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-            background-size: 40px 40px;
+            /* Shrunk down from 40px to 15px for a smaller grid size */
+            background-size: 15px 15px;
             pointer-events: none; 
             z-index: 2;
         }
@@ -43,11 +44,9 @@
             background: radial-gradient(circle, rgba(10, 25, 70, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
             top: 0;
             left: 0;
-            /* Smoothly transitions the position for a fluid look */
             transition: transform 0.1s ease-out;
             pointer-events: none;
             z-index: 1;
-            /* Shifts the center of the glow to perfectly align with the cursor */
             transform: translate(-50%, -50%);
             will-change: transform;
         }
@@ -63,11 +62,10 @@
 
         // Track mouse movement across the window
         window.addEventListener('mousemove', (e) => {
-            // Get the mouse X and Y coordinates
             const x = e.clientX;
             const y = e.clientY;
             
-            // Move the glow element instantly to the mouse position
+            // Move the glow element to the mouse position
             glow.style.transform = `translate(${x - 300}px, ${y - 300}px)`;
         });
     </script>
