@@ -35,7 +35,7 @@
             -webkit-mask-image: radial-gradient(circle, black 30%, transparent 80%);
         }
 
-        /* The Mouse Glow Effect - Ultra-high transparency */
+        /* The Mouse Glow Effect - Updated to exactly 10% opacity (0.1) */
         .glow {
             position: absolute;
             width: 200px; 
@@ -91,8 +91,8 @@
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Set grid line styling
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+            // Set grid line styling - exactly 10% opacity (0.1)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
             ctx.lineWidth = 1;
 
             // Function to calculate the warped coordinates of a single grid intersection point
