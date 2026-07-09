@@ -20,7 +20,7 @@
             overflow: hidden;
         }
 
-        /* The Grid Layer - Opacity increased to 0.25 for high visibility */
+        /* The Grid Layer - Crankaed way down to 0.02 opacity for high transparency */
         .grid {
             position: absolute;
             top: 0;
@@ -28,8 +28,8 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(to right, rgba(255, 255, 255, 0.25) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
             background-size: 40px 40px;
             pointer-events: none; 
             z-index: 2;
@@ -39,12 +39,12 @@
             -webkit-mask-image: var(--mask);
         }
 
-        /* The Mouse Glow Effect - Muted, deeper, and darker blue */
+        /* The Mouse Glow Effect - Enhanced to a richer, stronger blue color */
         .glow {
             position: absolute;
             width: 200px; 
             height: 200px; 
-            background: radial-gradient(circle, rgba(10, 21, 53, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+            background: radial-gradient(circle, rgba(0, 68, 255, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
             top: 0;
             left: 0;
             pointer-events: none;
@@ -68,11 +68,11 @@
             const x = e.clientX;
             const y = e.clientY;
             
-            // Keeps the dim blue glow locked to the cursor
+            // Keeps the brighter blue glow locked to the cursor
             glow.style.left = `${x}px`;
             glow.style.top = `${y}px`;
 
-            // Pushes the grid away
+            // Pushes the super faint grid away
             const maskCSS = `radial-gradient(circle 120px at ${x}px ${y}px, transparent 10%, black 70%)`;
             grid.style.maskImage = maskCSS;
             grid.style.webkitMaskImage = maskCSS;
