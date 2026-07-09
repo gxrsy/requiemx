@@ -20,7 +20,7 @@
             overflow: hidden;
         }
 
-        /* The Grid Layer - Reverted to 40px and now uses a mask for the push effect */
+        /* The Grid Layer */
         .grid {
             position: absolute;
             top: 0;
@@ -34,24 +34,25 @@
             pointer-events: none; 
             z-index: 2;
 
-            /* This mask hides the grid directly under the mouse to simulate it pushing away */
+            /* Mask pushes the grid away */
             mask-image: var(--mask);
             -webkit-mask-image: var(--mask);
         }
 
-        /* The Mouse Glow Effect - Now much smaller and tighter */
+        /* The Mouse Glow Effect - Fixed size, no resizing */
         .glow {
             position: absolute;
-            width: 200px; /* Shrunk down from 600px */
-            height: 200px; /* Shrunk down from 600px */
+            width: 200px; 
+            height: 200px; 
             background: radial-gradient(circle, rgba(10, 35, 100, 0.8) 0%, rgba(0, 0, 0, 0) 70%);
             top: 0;
             left: 0;
-            transition: transform 0.08s ease-out;
             pointer-events: none;
             z-index: 1;
-            transform: translate(-50%, -50%);
-            will-change: transform;
+            /* Using a simple negative margin offset so it centers perfectly on the mouse */
+            margin-left: -100px;
+            margin-top: -100px;
+            will-change: left, top;
         }
     </style>
 </head>
@@ -69,13 +70,11 @@
             const x = e.clientX;
             const y = e.clientY;
             
-            // Move the smaller glow element to the mouse position
-            glow.style.transform = `translate(${x - 100}px, ${y - 100}px)`; // Adjusted offset for 200px width
+            // Lock the blue glow directly to the cursor coordinates without transformations
+            glow.style.left = `${x}px`;
+            glow.style.top = `${y}px`;
 
-            /* Creates a dynamic CSS mask that punches a transparent hole in the grid 
-              right under the mouse, giving the visual illusion that the grid lines 
-              are being pushed away.
-            */
+            // Keep the grid masking effect running smoothly
             const maskCSS = `radial-gradient(circle 120px at ${x}px ${y}px, transparent 10%, black 70%)`;
             grid.style.maskImage = maskCSS;
             grid.style.webkitMaskImage = maskCSS;
