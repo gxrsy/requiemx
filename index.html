@@ -31,12 +31,12 @@
             pointer-events: auto; 
         }
 
-        /* The Mouse Glow Effect - Opacity reduced to 0.3 for extra transparency */
+        /* The Mouse Glow Effect - Dropped to 0.1 opacity for ultra-high transparency */
         .glow {
             position: absolute;
             width: 200px; 
             height: 200px; 
-            background: radial-gradient(circle, rgba(0, 68, 255, 0.3) 0%, rgba(0, 0, 0, 0) 70%);
+            background: radial-gradient(circle, rgba(0, 68, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
             top: 0;
             left: 0;
             pointer-events: none;
@@ -59,8 +59,8 @@
 
         let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
         const gridSpacing = 40;
-        const pushRadius = 80;   // Narrower field of effect
-        const pushStrength = 2;  // Minimized to 2 for an absolute bare minimum twitch
+        const pushRadius = 80;   
+        const pushStrength = 2;  
 
         // Set glow initial position
         glow.style.left = `${mouse.x}px`;
