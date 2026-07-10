@@ -48,7 +48,6 @@
         .main-content {
             position: relative;
             z-index: 10;
-            /* Pushes down slightly to account for the top bar height */
             margin-top: 60px; 
             display: flex;
             justify-content: center;
@@ -57,16 +56,23 @@
             padding: 0 40px;
         }
 
-        /* Centered Logo/Image Styling - Made significantly larger */
+        /* Centered Logo/Image Styling */
         .centered-image {
-            max-width: 800px; /* Increased from 400px to 800px */
-            max-height: 80vh; /* Allows it to occupy up to 80% of the screen height */
+            max-width: 800px; 
+            max-height: 80vh; 
             width: 100%;       
             height: auto;
             display: block;
             user-select: none;
             -webkit-user-drag: none;
             object-fit: contain;
+
+            /* CRITICAL FOR PIXEL ART: Prevents the browser from blurring the image when scaled up */
+            image-rendering: crisp-edges;
+            image-rendering: pixelated;
+
+            /* Moves the image slightly to the right */
+            margin-left: 40px; 
         }
 
         /* Starfield Container */
