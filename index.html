@@ -266,6 +266,12 @@
             display: none;
         }
 
+        .success-msg a {
+            color: #ffffff;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
         /* Action Buttons */
         .btn-submit {
             width: 100%;
@@ -319,7 +325,7 @@
 
     <div class="claim-container">
         <div class="claim-box">
-            <span class="claim-prefix">requiemx.vercel.app/</span>
+            <span class="claim-prefix">requiemx.netlify.app/</span>
             <input type="text" class="claim-input" id="claimInput" placeholder="username" autocomplete="off" spellcheck="false">
             <button class="btn-claim" id="claimBtn">Claim</button>
         </div>
@@ -411,8 +417,8 @@
         // Sign In / Dashboard button click handler
         openBtn.addEventListener('click', () => {
             if (currentUserSession) {
-                // If signed in, immediately redirect to dashboard
-                window.location.href = "https://requiemx.vercel.app/dashboard.html";
+                // Manually go to dashboard on click
+                window.location.href = "dashboard.html";
             } else {
                 // If signed out, open login modal
                 switchToMode(false);
@@ -420,7 +426,7 @@
             }
         });
 
-        // Close Modal via top right X button
+        // Close Modal
         closeBtn.addEventListener('click', () => {
             modal.classList.remove('active');
             resetForm();
@@ -429,14 +435,14 @@
         // Handle the landing page "Claim" bar button action
         claimBtn.addEventListener('click', () => {
             if (currentUserSession) {
-                // If already logged in, redirect directly to dashboard
-                window.location.href = "https://requiemx.vercel.app/dashboard.html";
+                // If logged in, head straight to dashboard
+                window.location.href = "dashboard.html";
                 return;
             }
 
             const desiredUsername = claimInput.value.trim().toLowerCase();
             if (desiredUsername) {
-                switchToMode(true); // Switch directly to Sign Up mode
+                switchToMode(true); 
                 usernameInput.value = desiredUsername;
                 modal.classList.add('active');
                 passwordInput.focus();
@@ -445,7 +451,6 @@
             }
         });
 
-        // Open modal or redirect if user hits 'Enter' inside the claim input
         claimInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 claimBtn.click();
@@ -484,7 +489,7 @@
                 
                 toggleContainer.innerHTML = `Don't have an account? <button class="toggle-btn" id="toggleMode">Sign up here</button>`;
             }
-            setupToggleListener(); // Re-bind event listener
+            setupToggleListener(); 
         }
 
         function setupToggleListener() {
@@ -513,7 +518,6 @@
                 return;
             }
 
-            // Create a virtual email under the hood so Supabase is happy
             const virtualEmail = `${username}@requiemx.local`;
 
             if (isSignUpMode) {
@@ -559,10 +563,8 @@
                     showError(error.message);
                     submitBtn.disabled = false;
                 } else {
-                    showSuccess("Account created successfully! Redirecting...");
-                    setTimeout(() => {
-                        window.location.href = "https://requiemx.vercel.app/dashboard.html";
-                    }, 1000);
+                    showSuccess(`Success! <a href="dashboard.html">Click here to go to your Dashboard</a>`);
+                    submitBtn.disabled = false;
                 }
             } else {
                 // --- SIGN IN WITH USERNAME ---
@@ -576,7 +578,8 @@
                     showError(cleanMessage === "Invalid login credentials" ? "Invalid username or password." : cleanMessage);
                     submitBtn.disabled = false;
                 } else {
-                    window.location.href = "https://requiemx.vercel.app/dashboard.html";
+                    showSuccess(`Logged in successfully! <a href="dashboard.html">Go to Dashboard</a>`);
+                    submitBtn.disabled = false;
                 }
             }
         });
@@ -585,9 +588,6 @@
         supabaseClient.auth.onAuthStateChange((event, session) => {
             currentUserSession = session;
             updateUIForSession(session);
-            if (event === 'SIGNED_IN') {
-                window.location.href = "https://requiemx.vercel.app/dashboard.html";
-            }
         });
 
         function showError(message) {
@@ -595,8 +595,8 @@
             errorMsgBox.style.display = "block";
         }
 
-        function showSuccess(message) {
-            successMsgBox.innerText = message;
+        function showSuccess(messageHTML) {
+            successMsgBox.innerHTML = messageHTML;
             successMsgBox.style.display = "block";
         }
     </script>
