@@ -58,26 +58,29 @@
             text-transform: uppercase;
         }
 
-        /* Clickable Overview Button */
-        .btn-overview {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #ffffff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 0.85rem;
+        /* Small text link (no button design) */
+        .nav-link {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4); /* Default small gray text */
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: color 0.2s ease;
             width: max-content;
-            display: flex;
-            align-items: center;
+            text-align: left;
+            padding: 0;
+            outline: none;
         }
 
-        .btn-overview:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Active state turns white */
+        .nav-link.active {
+            color: #ffffff;
         }
 
 
@@ -187,7 +190,7 @@
         
         <div class="menu-group">
             <div class="account-header">Account</div>
-            <button class="btn-overview" id="overviewBtn">Overview</button>
+            <button class="nav-link active" id="overviewLink">Overview</button>
         </div>
     </div>
 
@@ -221,7 +224,7 @@
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const signOutBtn = document.getElementById('signOutBtn');
-        const overviewBtn = document.getElementById('overviewBtn');
+        const overviewLink = document.getElementById('overviewLink');
         
         const userDisplay = document.getElementById('userDisplay');
         const cardUsername = document.getElementById('cardUsername');
@@ -240,6 +243,11 @@
         }
 
         checkSession();
+
+        // Handle Active Selection
+        overviewLink.addEventListener('click', () => {
+            overviewLink.classList.add('active');
+        });
 
         // Sign Out Event
         signOutBtn.addEventListener('click', async () => {
