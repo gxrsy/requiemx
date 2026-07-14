@@ -87,7 +87,7 @@
             margin-top: 100px;
             padding: 40px;
             width: calc(100% - 240px);
-            max-width: 1100px;
+            max-width: 800px;
             overflow-y: auto;
             height: calc(100vh - 100px);
         }
@@ -101,10 +101,10 @@
             letter-spacing: -0.2px;
         }
 
-        /* Horizontal Card Grid */
+        /* Horizontal Card Grid - adjusted for 2 columns */
         .overview-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             width: 100%;
         }
@@ -205,12 +205,6 @@
                 <div class="card-label">Alias</div>
                 <div class="card-value">0 aliases used</div>
                 <div class="card-subtext">1 alias slots remaining</div>
-            </div>
-
-            <div class="overview-card">
-                <div class="card-label">UID</div>
-                <div class="card-value" id="cardUid">15</div>
-                <div class="card-subtext">Verified register sequence</div>
             </div>
         </div>
     </main>
