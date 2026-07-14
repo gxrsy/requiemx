@@ -3,135 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>utopium reseller</title>
+    <title>Pure Math Face Scanner</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            background-color: #0F0F0F;
-            
-            /* CSS Grid pattern */
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-            background-size: 50px 50px;
-            background-position: center;
-            
-            /* Lock the screen height and hide scrollbars completely */
-            height: 100vh; 
+            font-family: sans-serif;
+            background-color: #121212;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
+            aspect-ratio: 3/4;
+            border-radius: 12px;
             overflow: hidden;
-            position: relative;
-            
-            /* Flexbox to perfectly center everything in the viewport */
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #000;
         }
-
-        /* Fixed Black Top Bar */
-        .top-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            background-color: #000000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 1000;
-        }
-
-        /* Centered Content Wrapper */
-        .main-content {
-            position: relative;
-            z-index: 10;
-            margin-top: 60px; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 0 40px;
-        }
-
-        /* Centered Logo/Image Styling */
-        .centered-image {
-            max-width: 800px; 
-            max-height: 80vh; 
-            width: 100%;       
-            height: auto;
-            display: block;
-            user-select: none;
-            -webkit-user-drag: none;
-            object-fit: contain;
-
-            /* Prevents the browser from blurring the image when scaled up */
-            image-rendering: crisp-edges;
-            image-rendering: pixelated;
-
-            /* Pushes the image aggressively to the right to visually counter-balance it */
-            transform: translateX(125px); 
-        }
-
-        /* Starfield Container */
-        #starfield {
+        video, canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 1;
+            object-fit: cover;
         }
-
-        /* Twinkle Animation */
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
+        button {
+            margin-top: 20px;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            background-color: #ff3366;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
         }
-
-        .star {
-            position: absolute;
-            background-color: #ffffff;
-            border-radius: 50%;
-            animation: twinkle ease-in-out infinite;
+        #result {
+            margin-top: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00ffcc;
+        }
+        .info {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
-    <div class="top-bar"></div>
+    <h1>Pure Math Face Scanner</h1>
+    <div class="info">Stand in front of a plain, light wall. Hold still.</div>
 
-    <div class="main-content">
-        <img class="centered-image" src="New Piskel.png" alt="Utopium Reseller Logo">
+    <div class="container">
+        <video id="webcam" autoplay playsinline muted></video>
+        <canvas id="output"></canvas>
     </div>
 
-    <div id="starfield"></div>
+    <button id="scanBtn">Scan & Calculate</button>
+    <div id="result">Ready</div>
 
     <script>
-        // Script to generate random, twinkling stars across the fixed screen area
-        const starfield = document.getElementById('starfield');
-        const numberOfStars = 40; 
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('output');
+        const ctx = canvas.getContext('2d');
+        const scanBtn = document.getElementById('scanBtn');
+        const resultDiv = document.getElementById('result');
 
-        for (let i = 0; i < numberOfStars; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
+        // Start local video
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+            .then(stream => video.srcObject = stream);
+
+        scanBtn.addEventListener('click', () => {
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
             
-            const size = Math.random() * 2 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
+            // Draw current camera frame to our canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             
-            star.style.top = `${Math.random() * 100}%`;
-            star.style.left = `${Math.random() * 100}%`;
-            
-            star.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            star.style.animationDelay = `${Math.random() * 5}s`;
-            
-            starfield.appendChild(star);
-        }
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imgData.data;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            resultDiv.innerText = "Processing pixels...";
+
+            // --- Edge-Detection Algorithm (Sobel-style Contrast check) ---
+            // We scan the image to find pixels where color changes drastically (the edge of your face)
+            let leftJaw = null;
+            let rightJaw = null;
+            let chin = null;
+            let leftCheek = null;
+            let rightCheek = null;
+
+            // Simple Grayscale Contrast Check function
+            function getBrightness(x, y) {
+                const idx = (y * w + x) * 4;
+                return (data[idx] + data[idx+1] + data[idx+2]) / 3;
+            }
+
+            // 1. Scan Bottom-Up to find the Chin
+            for (let y = h - 10; y > h / 2; y -= 2) {
+                for (let x = Math.floor(w * 0.4); x < Math.floor(w * 0.6); x += 2) {
+                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x, y - 10));
+                    if (diff > 25) { // Found high contrast edge
+                        chin = {x, y};
+                        break;
+                    }
+                }
+                if (chin) break;
+            }
+
+            // 2. Scan Left-to-Right to find Left Cheek
+            for (let x = 10; x < w / 2; x += 2) {
+                for (let y = Math.floor(h * 0.4); y < Math.floor(h * 0.6); y += 2) {
+                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x + 10, y));
+                    if (diff > 25) {
+                        leftCheek = {x, y};
+                        break;
+                    }
+                }
+                if (leftCheek) break;
+            }
+
+            // 3. Scan Right-to-Left to find Right Cheek
+            for (let x = w - 10; x > w / 2; x -= 2) {
+                for (let y = Math.floor(h * 0.4); y < Math.floor(h * 0.6); y += 2) {
+                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x - 10, y));
+                    if (diff > 25) {
+                        rightCheek = {x, y};
+                        break;
+                    }
+                }
+                if (rightCheek) break;
+            }
+
+            // 4. Scan Left-to-Right lower down for Left Jaw
+            for (let x = 10; x < w / 2; x += 2) {
+                for (let y = Math.floor(h * 0.65); y < Math.floor(h * 0.75); y += 2) {
+                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x + 10, y));
+                    if (diff > 25) {
+                        leftJaw = {x, y};
+                        break;
+                    }
+                }
+                if (leftJaw) break;
+            }
+
+            // 5. Scan Right-to-Left lower down for Right Jaw
+            for (let x = w - 10; x > w / 2; x -= 2) {
+                for (let y = Math.floor(h * 0.65); y < Math.floor(h * 0.75); y += 2) {
+                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x - 10, y));
+                    if (diff > 25) {
+                        rightJaw = {x, y};
+                        break;
+                    }
+                }
+                if (rightJaw) break;
+            }
+
+            // --- Draw calculated dots on your screen ---
+            ctx.fillStyle = "#ff0055";
+            const points = [chin, leftCheek, rightCheek, leftJaw, rightJaw];
+            points.forEach(pt => {
+                if (pt) {
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 8, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+            });
+
+            // --- Calculate Shape based on Dot Spacing ---
+            if (chin && leftCheek && rightCheek && leftJaw && rightJaw) {
+                const cheekWidth = Math.abs(rightCheek.x - leftCheek.x);
+                const jawWidth = Math.abs(rightJaw.x - leftJaw.x);
+                const faceLength = Math.abs(chin.y - (leftCheek.y + rightCheek.y)/2);
+
+                const lengthToWidthRatio = faceLength / cheekWidth;
+                const jawToCheekRatio = jawWidth / cheekWidth;
+
+                let shape = "Oval";
+                if (lengthToWidthRatio > 1.35) {
+                    shape = "Oblong / Rectangle";
+                } else if (lengthToWidthRatio < 1.05) {
+                    if (jawToCheekRatio > 0.88) {
+                        shape = "Square";
+                    } else {
+                        shape = "Round";
+                    }
+                } else {
+                    if (jawToCheekRatio > 0.9) {
+                        shape = "Square";
+                    } else if (jawToCheekRatio < 0.75) {
+                        shape = "Heart Shape";
+                    } else {
+                        shape = "Oval";
+                    }
+                }
+
+                resultDiv.innerHTML = `Detect Completed!<br>Shape: <span style="color:#ff3366">${shape}</span>`;
+            } else {
+                resultDiv.innerHTML = `<span style="color:#ffcc00">Could not find all face edges. Make sure your background is plain!</span>`;
+            }
+        });
     </script>
-
 </body>
 </html>
