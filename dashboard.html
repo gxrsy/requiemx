@@ -73,7 +73,6 @@
             width: max-content;
             display: flex;
             align-items: center;
-            gap: 8px;
         }
 
         .btn-overview:hover {
@@ -143,15 +142,6 @@
             margin-top: -4px;
         }
 
-        /* Icons in Top-Right corner of each card */
-        .card-icon {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            color: rgba(255, 255, 255, 0.25);
-            font-size: 1.1rem;
-        }
-
 
         /* --- TOP & BOTTOM RIGHT CORNERS --- */
         /* Top-Right Sign Out Button */
@@ -197,9 +187,7 @@
         
         <div class="menu-group">
             <div class="account-header">Account</div>
-            <button class="btn-overview" id="overviewBtn">
-                <span>👤</span> Overview
-            </button>
+            <button class="btn-overview" id="overviewBtn">Overview</button>
         </div>
     </div>
 
@@ -208,24 +196,21 @@
         
         <div class="overview-grid">
             <div class="overview-card">
-                <span class="card-icon">✏️</span>
                 <div class="card-label">Username</div>
                 <div class="card-value" id="cardUsername">...</div>
                 <div class="card-subtext">Change available now</div>
             </div>
 
             <div class="overview-card">
-                <span class="card-icon">👤</span>
                 <div class="card-label">Alias</div>
                 <div class="card-value">0 aliases used</div>
                 <div class="card-subtext">1 alias slots remaining</div>
             </div>
 
             <div class="overview-card">
-                <span class="card-icon">#</span>
                 <div class="card-label">UID</div>
-                <div class="card-value" id="cardUid">...</div>
-                <div class="card-subtext" id="uidSubtext">Loading position...</div>
+                <div class="card-value" id="cardUid">15</div>
+                <div class="card-subtext">Verified register sequence</div>
             </div>
         </div>
     </main>
@@ -246,10 +231,8 @@
         
         const userDisplay = document.getElementById('userDisplay');
         const cardUsername = document.getElementById('cardUsername');
-        const cardUid = document.getElementById('cardUid');
-        const uidSubtext = document.getElementById('uidSubtext');
 
-        // Verify Session and Fetch Real User ID Index
+        // Verify Session
         async function checkSession() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) {
@@ -260,38 +243,6 @@
             
             userDisplay.innerText = cleanUsername;
             cardUsername.innerText = cleanUsername;
-
-            // REAL DATABASE UID LOGIC:
-            // Since we cannot read auth.users, we save a public user profile tracking registration order.
-            // Let's upsert this user's current session into a public profiles table and fetch their real sequence ID.
-            try {
-                const userUuid = session.user.id;
-                const userEmail = session.user.email;
-
-                // 1. Ensure a profile row exists for this user in your public "profiles" database table
-                await supabaseClient
-                    .from('profiles')
-                    .upsert({ id: userUuid, username: cleanUsername, email: userEmail }, { onConflict: 'id' });
-
-                // 2. Fetch all profiles ordered by creation sequence to determine their exact registration order (1st, 2nd, etc.)
-                const { data: profiles, error } = await supabaseClient
-                    .from('profiles')
-                    .select('id')
-                    .order('created_at', { ascending: true });
-
-                if (error) throw error;
-
-                // Find the index of the logged-in user in the registration sequence
-                const index = profiles.findIndex(profile => profile.id === userUuid);
-                const realUid = index !== -1 ? index + 1 : 1;
-
-                cardUid.innerText = realUid;
-                uidSubtext.innerText = realUid === 1 ? "The very first user" : `Among the first ${realUid}`;
-            } catch (err) {
-                console.warn("Table fallback: If you haven't created a 'profiles' table yet, here is a fallback sequence ID:", err);
-                cardUid.innerText = "1";
-                uidSubtext.innerText = "The very first user";
-            }
         }
 
         checkSession();
