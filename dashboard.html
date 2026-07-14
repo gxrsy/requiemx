@@ -14,39 +14,43 @@
         }
 
         body {
-            background-color: #121212;
+            background-color: #0b0c10; /* Pure deep obsidian black */
             color: #ffffff;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
         }
 
         /* Top Header Area */
         .dashboard-header {
             width: 100%;
-            max-width: 600px;
+            max-width: 1200px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            padding: 24px 40px;
+            border-bottom: 1px solid rgba(0, 191, 255, 0.08);
         }
 
         .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 800;
             text-decoration: none;
             color: #ffffff;
+            letter-spacing: -1px;
+            background: linear-gradient(90deg, #ffffff 0%, #00bfff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .btn-signout {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            padding: 8px 20px;
-            border-radius: 50px;
+            background: rgba(0, 191, 255, 0.06);
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            color: #00bfff;
+            padding: 10px 24px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
             font-size: 0.9rem;
@@ -54,57 +58,84 @@
         }
 
         .btn-signout:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 191, 255, 0.15);
+            border-color: #00bfff;
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.25);
         }
 
-        /* Main Workspace Container */
-        .workspace {
+        /* Two-Column Grid Setup */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
             width: 100%;
-            max-width: 600px;
-            background: #18181c;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 1200px;
+            padding: 40px;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Side: Customize & Form */
+        .workspace {
+            background: #101216; /* Clean deep graphite gray */
+            border: 1px solid rgba(255, 255, 255, 0.03);
             border-radius: 24px;
             padding: 2.5rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
         }
 
         .welcome-title {
-            font-size: 1.75rem;
-            font-weight: 700;
+            font-size: 1.85rem;
+            font-weight: 800;
             margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .welcome-subtitle {
             color: rgba(255, 255, 255, 0.5);
             font-size: 0.95rem;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         .welcome-subtitle span {
-            color: #ffffff;
-            font-weight: bold;
-        }
-
-        /* Link Customizer Form */
-        .section-title {
-            font-size: 1.05rem;
+            color: #00bfff; /* Custom Electric Blue Highlight */
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 15px;
         }
 
+        .section-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(0, 191, 255, 0.8);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(0, 191, 255, 0.15);
+        }
+
+        /* Link Creator Form */
         .link-creator-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 35px;
-            background: #242428;
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            gap: 20px;
+            margin-bottom: 40px;
+            background: #14171d;
+            padding: 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(0, 191, 255, 0.05);
         }
 
         .input-group {
@@ -116,39 +147,44 @@
         .input-group label {
             font-size: 0.75rem;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.4);
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .input-group input {
-            background: #18181c;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #0b0c10;
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: #ffffff;
-            padding: 12px 16px;
-            border-radius: 10px;
+            padding: 14px 18px;
+            border-radius: 12px;
             font-size: 0.95rem;
             outline: none;
+            transition: all 0.2s;
         }
 
         .input-group input:focus {
-            border-color: rgba(255, 255, 255, 0.3);
+            border-color: #00bfff;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.15);
         }
 
         .btn-add {
-            background: #ffffff;
+            background: #00bfff;
             color: #000000;
             border: none;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 14px;
+            border-radius: 12px;
             font-weight: 700;
             cursor: pointer;
             font-size: 0.95rem;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             margin-top: 5px;
         }
 
         .btn-add:hover {
-            background-color: #e5e5e5;
+            background-color: #33ccff;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+            transform: translateY(-1px);
         }
 
         /* Display of Current Links */
@@ -162,10 +198,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #242428;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 14px 20px;
-            border-radius: 14px;
+            background: #14171d;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 16px 24px;
+            border-radius: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .link-item:hover {
+            border-color: rgba(0, 191, 255, 0.15);
         }
 
         .link-info {
@@ -180,7 +221,7 @@
         }
 
         .link-url {
-            color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.35);
             font-size: 0.85rem;
             word-break: break-all;
         }
@@ -192,9 +233,9 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 0.9rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            transition: background-color 0.2s;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s;
         }
 
         .btn-delete:hover {
@@ -205,9 +246,93 @@
             color: rgba(255, 255, 255, 0.3);
             font-size: 0.95rem;
             text-align: center;
-            padding: 20px;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+        }
+
+        /* Right Side: Visual Live Mockup Device (Matches modern Link-in-bio screens) */
+        .preview-pane {
+            position: sticky;
+            top: 40px;
+            background: #101216;
+            border: 1px solid rgba(0, 191, 255, 0.05);
+            border-radius: 32px;
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+        }
+
+        .preview-badge {
+            background: rgba(0, 191, 255, 0.1);
+            color: #00bfff;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        .avatar-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0b0c10 0%, #14171d 100%);
+            border: 2px solid #00bfff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #00bfff;
+            margin-bottom: 16px;
+            box-shadow: 0 0 20px rgba(0, 191, 255, 0.15);
+        }
+
+        .preview-username {
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .preview-url-badge {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 32px;
+        }
+
+        .preview-links {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .preview-btn {
+            width: 100%;
+            background: #0b0c10;
+            border: 1px solid rgba(0, 191, 255, 0.15);
+            color: #ffffff;
+            padding: 14px;
             border-radius: 14px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-btn:hover {
+            border-color: #00bfff;
+            background: rgba(0, 191, 255, 0.03);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.1);
         }
     </style>
 </head>
@@ -218,28 +343,40 @@
         <button class="btn-signout" id="signOutBtn">Sign Out</button>
     </header>
 
-    <main class="workspace">
-        <h1 class="welcome-title">My Dashboard</h1>
-        <p class="welcome-subtitle">Logged in as <span id="userDisplay">...</span></p>
+    <div class="dashboard-grid">
+        <main class="workspace">
+            <h1 class="welcome-title">My Workspace</h1>
+            <p class="welcome-subtitle">Logged in as <span id="userDisplay">...</span></p>
 
-        <h2 class="section-title">Add a link to your page</h2>
-        <div class="link-creator-form">
-            <div class="input-group">
-                <label for="linkTitle">Link Title (e.g., Discord, Instagram, My Web)</label>
-                <input type="text" id="linkTitle" placeholder="My Discord server">
+            <h2 class="section-title">Add Custom Link</h2>
+            <div class="link-creator-form">
+                <div class="input-group">
+                    <label for="linkTitle">Link Title (e.g. Discord, Twitch)</label>
+                    <input type="text" id="linkTitle" placeholder="My Discord Server">
+                </div>
+                <div class="input-group">
+                    <label for="linkUrl">Destination URL</label>
+                    <input type="url" id="linkUrl" placeholder="https://discord.gg/yourlink">
+                </div>
+                <button class="btn-add" id="addLinkBtn">Add New Link</button>
             </div>
-            <div class="input-group">
-                <label for="linkUrl">Destination URL</label>
-                <input type="url" id="linkUrl" placeholder="https://discord.gg/yourlink">
-            </div>
-            <button class="btn-add" id="addLinkBtn">Add New Link</button>
-        </div>
 
-        <h2 class="section-title">Your Live Links</h2>
-        <div class="links-list" id="linksList">
-            <div class="no-links">You haven't added any links to your page yet.</div>
-        </div>
-    </main>
+            <h2 class="section-title">Your Live Links</h2>
+            <div class="links-list" id="linksList">
+                <div class="no-links">You haven't added any links to your page yet.</div>
+            </div>
+        </main>
+
+        <aside class="preview-pane">
+            <span class="preview-badge">Live Preview</span>
+            <div class="avatar-placeholder" id="avatarLetter">R</div>
+            <h3 class="preview-username" id="previewUsername">@username</h3>
+            <span class="preview-url-badge" id="previewUrl">requiemx.netlify.app/username</span>
+            
+            <div class="preview-links" id="previewLinksContainer">
+                </div>
+        </aside>
+    </div>
 
     <script>
         const SUPABASE_URL = "https://vhozskumzytvbidirism.supabase.co"; 
@@ -253,32 +390,39 @@
         const linkUrlInput = document.getElementById('linkUrl');
         const addLinkBtn = document.getElementById('addLinkBtn');
         const linksListContainer = document.getElementById('linksList');
+        
+        // Preview Pane DOM elements
+        const avatarLetter = document.getElementById('avatarLetter');
+        const previewUsername = document.getElementById('previewUsername');
+        const previewUrl = document.getElementById('previewUrl');
+        const previewLinksContainer = document.getElementById('previewLinksContainer');
 
         let userSession = null;
-        let mockLinksStorage = []; // Local link mock database
+        let mockLinksStorage = [];
 
-        // Check auth status on load
+        // Check user auth status
         async function checkSession() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) {
-                // If not logged in, bounce back to landing page
                 window.location.href = "index.html";
                 return;
             }
             userSession = session;
 
-            // Grab the clean username out of the virtual email we generated
             const virtualEmail = session.user.email;
             const cleanUsername = virtualEmail.split('@')[0];
+            
+            // Set User text configurations
             userDisplay.innerText = cleanUsername;
+            previewUsername.innerText = `@${cleanUsername}`;
+            avatarLetter.innerText = cleanUsername.charAt(0).toUpperCase();
+            previewUrl.innerText = `requiemx.netlify.app/${cleanUsername}`;
 
-            // Load saved links from local storage (scoped specifically to this username)
             loadUserLinks(cleanUsername);
         }
 
         checkSession();
 
-        // Local Storage Handler to store user configurations
         function loadUserLinks(username) {
             const saved = localStorage.getItem(`requiemx_links_${username}`);
             if (saved) {
@@ -296,15 +440,19 @@
             renderLinks();
         }
 
-        // Render live list of custom links
+        // Render live list of custom links and update mirror preview pane
         function renderLinks() {
             if (mockLinksStorage.length === 0) {
                 linksListContainer.innerHTML = `<div class="no-links">You haven't added any links to your page yet.</div>`;
+                previewLinksContainer.innerHTML = '';
                 return;
             }
 
             linksListContainer.innerHTML = '';
+            previewLinksContainer.innerHTML = '';
+
             mockLinksStorage.forEach((link, index) => {
+                // Render link item inside workspace config
                 const item = document.createElement('div');
                 item.className = 'link-item';
                 item.innerHTML = `
@@ -315,10 +463,17 @@
                     <button class="btn-delete" onclick="deleteLink(${index})">Delete</button>
                 `;
                 linksListContainer.appendChild(item);
+
+                // Mirror actual link item onto live mobile preview screen
+                const previewBtn = document.createElement('a');
+                previewBtn.className = 'preview-btn';
+                previewBtn.href = link.url;
+                previewBtn.target = '_blank';
+                previewBtn.innerText = link.title;
+                previewLinksContainer.appendChild(previewBtn);
             });
         }
 
-        // Add a new link to state & local storage
         addLinkBtn.addEventListener('click', () => {
             const title = linkTitleInput.value.trim();
             let url = linkUrlInput.value.trim();
@@ -328,7 +483,6 @@
                 return;
             }
 
-            // Auto prepends https:// if they type "instagram.com"
             if (!/^https?:\/\//i.test(url)) {
                 url = 'https://' + url;
             }
@@ -336,24 +490,20 @@
             mockLinksStorage.push({ title, url });
             saveUserLinks();
 
-            // Clear inputs
             linkTitleInput.value = '';
             linkUrlInput.value = '';
         });
 
-        // Delete a link
         window.deleteLink = function(index) {
             mockLinksStorage.splice(index, 1);
             saveUserLinks();
         };
 
-        // Sign Out function
         signOutBtn.addEventListener('click', async () => {
             const { error } = await supabaseClient.auth.signOut();
             window.location.href = "index.html";
         });
 
-        // Security helper to prevent HTML injection inside custom links
         function escapeHtml(str) {
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
