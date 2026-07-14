@@ -14,262 +14,20 @@
         }
 
         body {
-            background-color: #1a1a1a; /* Clean dark gray background */
+            background-color: #1a1a1a; /* Dark gray background */
             color: #ffffff;
             height: 100vh;
             width: 100vw;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
+            position: relative;
             overflow: hidden;
         }
 
-        /* --- SIDEBAR STYLE (DARK GRAY THEME) --- */
-        .sidebar {
-            width: 260px;
-            background-color: #242424; /* Slightly lighter dark-gray panel */
-            height: 100%;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            flex-direction: column;
-            padding: 24px 16px;
-            justify-content: space-between;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        /* Sidebar Logo Header */
-        .sidebar-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: #ffffff;
-            text-decoration: none;
-            margin-bottom: 20px;
-            padding-left: 8px;
-        }
-
-        /* Search Box styling */
-        .search-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .search-input {
-            width: 100%;
-            background: #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            padding: 10px 12px 10px 36px;
-            color: #ffffff;
-            font-size: 0.85rem;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 0.9rem;
-            pointer-events: none;
-        }
-
-        .kb-shortcut {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            pointer-events: none;
-        }
-
-        /* Menu Groups */
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            flex-grow: 1;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 12px 14px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 0.925rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .nav-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-        }
-
-        /* Dropdown Group Styling */
-        .nav-dropdown {
-            background: rgba(255, 255, 255, 0.04);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-dropdown-arrow {
-            margin-left: auto;
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .dropdown-submenu {
-            display: flex;
-            flex-direction: column;
-            padding-left: 42px;
-            margin-top: 4px;
-            margin-bottom: 12px;
-            gap: 8px;
-        }
-
-        .submenu-item {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .submenu-item:hover, .submenu-item.active {
-            color: #ffffff;
-        }
-
-        /* Footer Container */
-        .sidebar-footer {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-top: auto;
-            padding-top: 20px;
-        }
-
-        /* Support Box panel */
-        .support-box {
-            background: #1a1a1a;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 16px;
-        }
-
-        .support-title {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: 600;
-            line-height: 1.4;
-            margin-bottom: 12px;
-        }
-
-        .btn-support {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            padding: 10px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: all 0.2s;
-        }
-
-        .btn-support:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-mypage {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.8);
-            padding: 10px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 700;
-            transition: all 0.2s;
-            margin-top: 8px;
-        }
-
-        .btn-mypage:hover {
-            background: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
-        }
-
-        /* Bottom Share Button */
-        .btn-share {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-share:hover {
-            background-color: #e5e5e5;
-        }
-
-        /* --- MAIN APP CANVAS --- */
-        .main-content {
-            flex-grow: 1;
-            height: 100%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        /* Top Bar */
-        .top-navbar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 40px;
-        }
-
+        /* Top-Left Logo */
         .logo {
+            position: absolute;
+            top: 30px;
+            left: 40px;
             font-size: 1.5rem;
             font-weight: 700;
             text-decoration: none;
@@ -279,6 +37,9 @@
 
         /* Top-Right Sign Out Button */
         .btn-signout {
+            position: absolute;
+            top: 30px;
+            right: 40px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: #ffffff;
@@ -312,68 +73,12 @@
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div>
-            <a href="index.html" class="sidebar-header">
-                requiemx
-            </a>
+    <a href="index.html" class="logo">requiemx</a>
+    
+    <button class="btn-signout" id="signOutBtn">Sign Out</button>
 
-            <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" placeholder="Search features..." readonly>
-                <span class="kb-shortcut">Ctrl K</span>
-            </div>
-
-            <nav class="nav-menu">
-                <div class="nav-item nav-dropdown">
-                    <span>👤</span> Account
-                    <span class="nav-dropdown-arrow">▼</span>
-                </div>
-                <div class="dropdown-submenu">
-                    <a href="#" class="submenu-item active">Overview</a>
-                    <a href="#" class="submenu-item">Analytics</a>
-                    <a href="#" class="submenu-item">Badges</a>
-                    <a href="#" class="submenu-item">Settings</a>
-                </div>
-
-                <a href="#" class="nav-item">
-                    <span>✏️</span> Customize
-                </a>
-                <a href="#" class="nav-item">
-                    <span>🔗</span> Links
-                </a>
-                <a href="#" class="nav-item">
-                    <span>💎</span> Premium
-                </a>
-                <a href="#" class="nav-item">
-                    <span>🖼️</span> Image Host
-                </a>
-                <a href="#" class="nav-item">
-                    <span>📁</span> Templates
-                </a>
-            </nav>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="support-box">
-                <div class="support-title">Have a question or need support?</div>
-                <a href="#" class="btn-support">💬 Help Center</a>
-                <a href="#" class="btn-mypage">🔗 My Page</a>
-            </div>
-            
-            <button class="btn-share">📢 Share Your Profile</button>
-        </div>
-    </aside>
-
-    <div class="main-content">
-        <header class="top-navbar">
-            <a href="index.html" class="logo">requiemx</a>
-            <button class="btn-signout" id="signOutBtn">Sign Out</button>
-        </header>
-
-        <div class="user-status">
-            signed in as <span id="userDisplay">...</span>
-        </div>
+    <div class="user-status">
+        signed in as <span id="userDisplay">...</span>
     </div>
 
     <script>
