@@ -83,6 +83,46 @@
             color: #ffffff;
         }
 
+        /* --- SUB MENU STYLES (NEW) --- */
+        .sub-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: 12px; /* Indent slightly */
+            padding-left: 12px; /* Optional visual separator line effect if you add a border-left later */
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none; /* Disable clicks when hidden */
+        }
+
+        .sub-menu.open {
+            max-height: 200px; /* Arbitrary large height to allow content to expand */
+            opacity: 1;
+            margin-top: 4px;
+            pointer-events: auto;
+        }
+
+        .sub-link {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            width: max-content;
+            text-align: left;
+            padding: 0;
+            outline: none;
+        }
+
+        .sub-link:hover {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
 
         /* --- CENTER WORKSPACE PANELS --- */
         .main-workspace {
@@ -193,9 +233,17 @@
             <button class="nav-link active" id="overviewLink">Overview</button>
         </div>
 
-        <div class="menu-group">
+        <div class="menu-group" id="customiseGroup">
             <div class="account-header">Customise</div>
+            
+            <!-- The Button that toggles the menu -->
             <button class="nav-link" id="profileLink">Profile</button>
+
+            <!-- The Hidden Sub Menu -->
+            <div class="sub-menu" id="profileSubMenu">
+                <button class="sub-link">Edit Profile</button>
+                <button class="sub-link">Change Password</button>
+            </div>
         </div>
     </div>
 
@@ -230,6 +278,8 @@
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const signOutBtn = document.getElementById('signOutBtn');
         const overviewLink = document.getElementById('overviewLink');
+        const profileLink = document.getElementById('profileLink');
+        const profileSubMenu = document.getElementById('profileSubMenu');
         
         const userDisplay = document.getElementById('userDisplay');
         const cardUsername = document.getElementById('cardUsername');
@@ -249,9 +299,21 @@
 
         checkSession();
 
-        // Handle Active Selection
+        // Handle Active Selection for Overview
         overviewLink.addEventListener('click', () => {
             overviewLink.classList.add('active');
+            // Optionally close profile menu if open
+            profileSubMenu.classList.remove('open');
+            profileLink.classList.remove('active');
+        });
+
+        // Handle Profile Menu Toggle
+        profileLink.addEventListener('click', () => {
+            // Toggle the 'open' class on the submenu
+            profileSubMenu.classList.toggle('open');
+            
+            // Toggle active state on the button itself
+            profileLink.classList.toggle('active');
         });
 
         // Sign Out Event
