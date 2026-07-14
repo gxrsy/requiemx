@@ -35,7 +35,7 @@
             letter-spacing: -0.5px;
         }
 
-        /* Account Header - shifted down, bold and white */
+        /* Account Header */
         .account-header {
             position: absolute;
             top: 110px;
@@ -45,6 +45,29 @@
             color: #ffffff;
             letter-spacing: 0.5px;
             text-transform: uppercase;
+        }
+
+        /* Clickable Overview Button - smaller and placed under the header */
+        .btn-overview {
+            position: absolute;
+            top: 155px;
+            left: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-overview:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.25);
         }
 
         /* Top-Right Sign Out Button */
@@ -88,6 +111,8 @@
     <a href="index.html" class="logo">requiemx</a>
     
     <div class="account-header">Account</div>
+
+    <button class="btn-overview" id="overviewBtn">Overview</button>
     
     <button class="btn-signout" id="signOutBtn">Sign Out</button>
 
@@ -101,6 +126,7 @@
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const signOutBtn = document.getElementById('signOutBtn');
+        const overviewBtn = document.getElementById('overviewBtn');
         const userDisplay = document.getElementById('userDisplay');
 
         // Verify Session
@@ -115,6 +141,12 @@
         }
 
         checkSession();
+
+        // Overview click event
+        overviewBtn.addEventListener('click', () => {
+            console.log("Overview button clicked!");
+            // You can easily add functionality here later
+        });
 
         // Sign Out Event
         signOutBtn.addEventListener('click', async () => {
