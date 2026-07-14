@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pure Math Face Scanner</title>
+    <title>Math Skin Outline Tracker</title>
     <style>
         body {
             font-family: sans-serif;
-            background-color: #121212;
+            background-color: #000;
             color: #fff;
             text-align: center;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
         }
         .container {
             position: relative;
@@ -21,7 +21,6 @@
             aspect-ratio: 3/4;
             border-radius: 12px;
             overflow: hidden;
-            background: #000;
         }
         video, canvas {
             position: absolute;
@@ -30,187 +29,137 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transform: scaleX(-1); /* Mirror view */
         }
-        button {
-            margin-top: 20px;
-            padding: 14px 28px;
-            font-size: 1rem;
-            font-weight: bold;
-            background-color: #ff3366;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-        }
-        #result {
-            margin-top: 15px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #00ffcc;
-        }
-        .info {
-            font-size: 0.8rem;
-            color: #888;
-            margin-bottom: 15px;
+        #ui-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 11px;
+            text-align: left;
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(0,0,0,0.6);
+            padding: 5px;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <h1>Pure Math Face Scanner</h1>
-    <div class="info">Stand in front of a plain, light wall. Hold still.</div>
+    <h2 style="font-size: 1.2rem; margin: 10px 0 5px 0;">Pure Math Skin Outliner</h2>
+    <p style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">Calculates skin pixels using color formulas.</p>
 
     <div class="container">
+        <div id="ui-overlay">FPS: --<br>Skin Pixels: --</div>
         <video id="webcam" autoplay playsinline muted></video>
         <canvas id="output"></canvas>
     </div>
-
-    <button id="scanBtn">Scan & Calculate</button>
-    <div id="result">Ready</div>
 
     <script>
         const video = document.getElementById('webcam');
         const canvas = document.getElementById('output');
         const ctx = canvas.getContext('2d');
-        const scanBtn = document.getElementById('scanBtn');
-        const resultDiv = document.getElementById('result');
+        const uiOverlay = document.getElementById('ui-overlay');
 
-        // Start local video
+        let lastTime = 0;
+
+        // Start Mobile Camera
         navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-            .then(stream => video.srcObject = stream);
-
-        scanBtn.addEventListener('click', () => {
-            canvas.width = video.videoWidth || 640;
-            canvas.height = video.videoHeight || 480;
-            
-            // Draw current camera frame to our canvas
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imgData.data;
-            const w = canvas.width;
-            const h = canvas.height;
-
-            resultDiv.innerText = "Processing pixels...";
-
-            // --- Edge-Detection Algorithm (Sobel-style Contrast check) ---
-            // We scan the image to find pixels where color changes drastically (the edge of your face)
-            let leftJaw = null;
-            let rightJaw = null;
-            let chin = null;
-            let leftCheek = null;
-            let rightCheek = null;
-
-            // Simple Grayscale Contrast Check function
-            function getBrightness(x, y) {
-                const idx = (y * w + x) * 4;
-                return (data[idx] + data[idx+1] + data[idx+2]) / 3;
-            }
-
-            // 1. Scan Bottom-Up to find the Chin
-            for (let y = h - 10; y > h / 2; y -= 2) {
-                for (let x = Math.floor(w * 0.4); x < Math.floor(w * 0.6); x += 2) {
-                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x, y - 10));
-                    if (diff > 25) { // Found high contrast edge
-                        chin = {x, y};
-                        break;
-                    }
-                }
-                if (chin) break;
-            }
-
-            // 2. Scan Left-to-Right to find Left Cheek
-            for (let x = 10; x < w / 2; x += 2) {
-                for (let y = Math.floor(h * 0.4); y < Math.floor(h * 0.6); y += 2) {
-                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x + 10, y));
-                    if (diff > 25) {
-                        leftCheek = {x, y};
-                        break;
-                    }
-                }
-                if (leftCheek) break;
-            }
-
-            // 3. Scan Right-to-Left to find Right Cheek
-            for (let x = w - 10; x > w / 2; x -= 2) {
-                for (let y = Math.floor(h * 0.4); y < Math.floor(h * 0.6); y += 2) {
-                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x - 10, y));
-                    if (diff > 25) {
-                        rightCheek = {x, y};
-                        break;
-                    }
-                }
-                if (rightCheek) break;
-            }
-
-            // 4. Scan Left-to-Right lower down for Left Jaw
-            for (let x = 10; x < w / 2; x += 2) {
-                for (let y = Math.floor(h * 0.65); y < Math.floor(h * 0.75); y += 2) {
-                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x + 10, y));
-                    if (diff > 25) {
-                        leftJaw = {x, y};
-                        break;
-                    }
-                }
-                if (leftJaw) break;
-            }
-
-            // 5. Scan Right-to-Left lower down for Right Jaw
-            for (let x = w - 10; x > w / 2; x -= 2) {
-                for (let y = Math.floor(h * 0.65); y < Math.floor(h * 0.75); y += 2) {
-                    const diff = Math.abs(getBrightness(x, y) - getBrightness(x - 10, y));
-                    if (diff > 25) {
-                        rightJaw = {x, y};
-                        break;
-                    }
-                }
-                if (rightJaw) break;
-            }
-
-            // --- Draw calculated dots on your screen ---
-            ctx.fillStyle = "#ff0055";
-            const points = [chin, leftCheek, rightCheek, leftJaw, rightJaw];
-            points.forEach(pt => {
-                if (pt) {
-                    ctx.beginPath();
-                    ctx.arc(pt.x, pt.y, 8, 0, 2 * Math.PI);
-                    ctx.fill();
-                }
+            .then(stream => {
+                video.srcObject = stream;
+                requestAnimationFrame(processFrame);
             });
 
-            // --- Calculate Shape based on Dot Spacing ---
-            if (chin && leftCheek && rightCheek && leftJaw && rightJaw) {
-                const cheekWidth = Math.abs(rightCheek.x - leftCheek.x);
-                const jawWidth = Math.abs(rightJaw.x - leftJaw.x);
-                const faceLength = Math.abs(chin.y - (leftCheek.y + rightCheek.y)/2);
+        function processFrame(time) {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvas.width = 320; // Lower resolution for fast mobile processing
+                canvas.height = 240;
 
-                const lengthToWidthRatio = faceLength / cheekWidth;
-                const jawToCheekRatio = jawWidth / cheekWidth;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imgData.data;
+                const w = canvas.width;
+                const h = canvas.height;
 
-                let shape = "Oval";
-                if (lengthToWidthRatio > 1.35) {
-                    shape = "Oblong / Rectangle";
-                } else if (lengthToWidthRatio < 1.05) {
-                    if (jawToCheekRatio > 0.88) {
-                        shape = "Square";
-                    } else {
-                        shape = "Round";
-                    }
-                } else {
-                    if (jawToCheekRatio > 0.9) {
-                        shape = "Square";
-                    } else if (jawToCheekRatio < 0.75) {
-                        shape = "Heart Shape";
-                    } else {
-                        shape = "Oval";
+                // Create a secondary map to keep track of where skin is detected
+                const skinMap = new Uint8Array(w * h);
+                let skinPixelCount = 0;
+
+                // 1. Math Formula for Skin Detection (YCbCr Rules)
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i+1];
+                    const b = data[i+2];
+
+                    // Convert RGB to YCbCr
+                    const Y = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const Cb = 128 - 0.168736 * r - 0.331264 * g + 0.5 * b;
+                    const Cr = 128 + 0.5 * r - 0.418688 * g - 0.081312 * b;
+
+                    // Standard human skin color range criteria
+                    if (Cr > 135 && Cr < 180 && Cb > 85 && Cb < 135 && Y > 80) {
+                        skinMap[i / 4] = 1;
+                        skinPixelCount++;
                     }
                 }
 
-                resultDiv.innerHTML = `Detect Completed!<br>Shape: <span style="color:#ff3366">${shape}</span>`;
-            } else {
-                resultDiv.innerHTML = `<span style="color:#ffcc00">Could not find all face edges. Make sure your background is plain!</span>`;
+                // Keep track of outermost skin boundary points
+                let minX = w, maxX = 0, maxY = 0;
+                let leftBound = null, rightBound = null, bottomBound = null;
+
+                // 2. Draw Skin Outline
+                ctx.strokeStyle = "#00ff00"; // Neon green outline
+                ctx.lineWidth = 1.5;
+
+                for (let y = 1; y < h - 1; y++) {
+                    for (let x = 1; x < w - 1; x++) {
+                        const idx = y * w + x;
+                        
+                        // If it's a skin pixel, check if it borders a non-skin pixel (an edge)
+                        if (skinMap[idx] === 1) {
+                            const isEdge = (
+                                skinMap[idx - 1] === 0 || 
+                                skinMap[idx + 1] === 0 || 
+                                skinMap[idx - w] === 0 || 
+                                skinMap[idx + w] === 0
+                            );
+
+                            if (isEdge) {
+                                // Draw outline pixel
+                                ctx.fillStyle = "#00ff00";
+                                ctx.fillRect(x, y, 1.5, 1.5);
+
+                                // Track boundary points for the dots
+                                if (x < minX && y > h * 0.3) { minX = x; leftBound = {x, y}; }
+                                if (x > maxX && y > h * 0.3) { maxX = x; rightBound = {x, y}; }
+                                if (y > maxY && x > w * 0.3 && x < w * 0.7) { maxY = y; bottomBound = {x, y}; }
+                            }
+                        }
+                    }
+                }
+
+                // 3. Draw Landmark Tracking Dots (Blue Dots)
+                ctx.fillStyle = "#00ffff"; // Cyan tracking dots
+                const landmarks = [leftBound, rightBound, bottomBound];
+                landmarks.forEach(pt => {
+                    if (pt) {
+                        ctx.beginPath();
+                        ctx.arc(pt.x, pt.y, 4, 0, 2 * Math.PI);
+                        ctx.fill();
+                    }
+                });
+
+                // Update UI performance tracker
+                const fps = Math.round(1000 / (time - lastTime));
+                lastTime = time;
+                uiOverlay.innerHTML = `FPS: ${fps}<br>Skin Pixels: ${skinPixelCount}`;
             }
-        });
+            requestAnimationFrame(processFrame);
+        }
     </script>
 </body>
 </html>
